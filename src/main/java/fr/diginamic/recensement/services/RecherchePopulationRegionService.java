@@ -45,7 +45,7 @@ public class RecherchePopulationRegionService extends MenuService {
             }
 
         } catch (Exception e) {
-            System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+            System.err.println("Une erreur inattendue s'est produite : " + e.getMessage());
         }
     }
 }

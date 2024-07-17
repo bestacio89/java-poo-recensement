@@ -35,12 +35,12 @@ public class RecherchePopulationDepartementService extends MenuService {
             }
 
             if (somme > 0) {
-                System.out.println("Population du département " + choix + " : " + somme);
+                System.err.println("Population du département " + choix + " : " + somme);
             } else {
-                System.out.println("Département " + choix + " non trouvé.");
+                System.err.println("Département " + choix + " non trouvé.");
             }
         } catch (Exception e) {
-            System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+            System.err.println("Une erreur inattendue s'est produite : " + e.getMessage());
         }
     }
 }

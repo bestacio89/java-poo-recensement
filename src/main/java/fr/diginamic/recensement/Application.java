@@ -36,7 +36,7 @@ public class Application {
             filePath = ClassLoader.getSystemClassLoader().getResource("recensement.csv").getFile();
             recensement = RecensementUtils.lire(filePath);
         } catch (Exception e) {
-            System.out.println("Erreur lors de la lecture du fichier de recensement: " + e.getMessage());
+            System.err.println("Erreur lors de la lecture du fichier de recensement: " + e.getMessage());
             System.exit(-1);
         }
 
@@ -104,12 +104,12 @@ public class Application {
                         break;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Erreur : Veuillez saisir un nombre valide.");
+                System.err.println("Erreur : Veuillez saisir un nombre valide.");
             } catch (InputMismatchException e) {
-                System.out.println("Erreur de saisie : " + e.getMessage());
+                System.err.println("Erreur de saisie : " + e.getMessage());
                 scanner.next(); // Clear the invalid input
             } catch (Exception e) {
-                System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+                System.err.println("Une erreur inattendue s'est produite : " + e.getMessage());
             }
         } while (choix != 99);
 

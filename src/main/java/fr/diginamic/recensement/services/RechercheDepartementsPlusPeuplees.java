@@ -59,11 +59,11 @@ public class RechercheDepartementsPlusPeuplees extends MenuService {
             }
 
         } catch (NumberFormatException e) {
-            System.out.println("Erreur : veuillez saisir un nombre entier valide.");
+            System.err.println("Erreur : veuillez saisir un nombre entier valide.");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Erreur : le nombre de départements demandé est supérieur au nombre total de départements disponibles.");
+            System.err.println("Erreur : le nombre de départements demandé est supérieur au nombre total de départements disponibles.");
         } catch (Exception e) {
-            System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+            System.err.println("Une erreur inattendue s'est produite : " + e.getMessage());
         }
 
     }

@@ -48,13 +48,13 @@ public class RecherchePopulationBorneService extends MenuService {
                 }
             }
             if (!found) {
-                System.out.println("Aucune ville trouvée pour ce département avec les critères de population spécifiés.");
+                System.err.println("Aucune ville trouvée pour ce département avec les critères de population spécifiés.");
             }
 
         } catch (NumberFormatException e) {
-            System.out.println("Erreur : veuillez saisir des nombres entiers valides pour les populations.");
+            System.err.println("Erreur : veuillez saisir des nombres entiers valides pour les populations.");
         } catch (Exception e) {
-            System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+            System.err.println("Une erreur inattendue s'est produite : " + e.getMessage());
         }
     }
 }

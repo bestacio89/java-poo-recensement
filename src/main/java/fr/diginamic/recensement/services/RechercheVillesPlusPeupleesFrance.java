@@ -43,9 +43,9 @@ public class RechercheVillesPlusPeupleesFrance extends MenuService {
             }
 
         } catch (NumberFormatException e) {
-            System.out.println("Erreur : Veuillez saisir un nombre valide pour le nombre de villes.");
+            System.err.println("Erreur : Veuillez saisir un nombre valide pour le nombre de villes.");
         } catch (Exception e) {
-            System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+            System.err.println("Une erreur inattendue s'est produite : " + e.getMessage());
         }
     }
 }
