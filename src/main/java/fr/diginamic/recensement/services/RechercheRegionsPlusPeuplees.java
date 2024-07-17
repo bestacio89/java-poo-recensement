@@ -13,59 +13,70 @@ import fr.diginamic.recensement.entites.Ville;
 import fr.diginamic.recensement.services.comparators.EnsemblePopComparateur;
 
 /**
- * Affichage des 10 régions les plus peuplées
- * 
+ * Affichage des N régions les plus peuplées
+ *
  * @author DIGINAMIC
  *
  */
 public class RechercheRegionsPlusPeuplees extends MenuService {
 
-	@Override
-	public void traiter(Recensement recensement, Scanner scanner) {
+    @Override
+    public void traiter(Recensement recensement, Scanner scanner) {
 
-		System.out.println("Veuillez saisir un nombre de régions:");
-		String nbRegionsStr = scanner.nextLine();
-		int nbRegions = Integer.parseInt(nbRegionsStr);
+        try {
+            System.out.println("Veuillez saisir un nombre de régions:");
+            String nbRegionsStr = scanner.nextLine();
+            int nbRegions = Integer.parseInt(nbRegionsStr);
 
-		// On récupére la liste des villes du recensement
-		List<Ville> villes = recensement.getVilles();
+            // On vérifie que le nombre de régions saisi est positif
+            if (nbRegions <= 0) {
+                System.out.println("Erreur : Veuillez saisir un nombre positif de régions.");
+                return;
+            }
 
-		// On créé une HashMap pour stocker les régions
-		// - Clé: nom de la région
-		// - Valeur: instance de région
-		Map<String, Region> mapRegions = new HashMap<>();
+            // On récupère la liste des villes du recensement
+            List<Ville> villes = recensement.getVilles();
 
-		// On parcourt les 35800 villes, une par une
-		for (Ville ville : villes) {
+            // On crée une HashMap pour stocker les régions
+            // - Clé: nom de la région
+            // - Valeur: instance de région
+            Map<String, Region> mapRegions = new HashMap<>();
 
-			// On regarde si pour une ville donnée, la région existe dans la map ou non
-			Region region = mapRegions.get(ville.getNomRegion());
+            // On parcourt les villes pour regrouper par région
+            for (Ville ville : villes) {
+                // On regarde si la région existe déjà dans la map
+                Region region = mapRegions.get(ville.getNomRegion());
 
-			// Si la région n'existe pas, on la créée
-			if (region == null) {
-				region = new Region(ville.getCodeRegion(), ville.getNomRegion());
-				mapRegions.put(ville.getNomRegion(), region);
-			}
+                // Si la région n'existe pas, on la créée
+                if (region == null) {
+                    region = new Region(ville.getCodeRegion(), ville.getNomRegion());
+                    mapRegions.put(ville.getNomRegion(), region);
+                }
 
-			// Une fois qu'on a une région, on lui ajoute la ville courante
-			region.addVille(ville);
-		}
+                // On ajoute la ville à la région
+                region.addVille(ville);
+            }
 
-		// Une fois la boucle terminée, on va récupérer toutes les régions qui sont dans
-		// la HashMap pour les mettre dans une liste
-		List<Region> regions = new ArrayList<Region>();
-		regions.addAll(mapRegions.values());
+            // On récupère la liste des régions à partir de la map
+            List<Region> regions = new ArrayList<>(mapRegions.values());
 
-		// On créé un comparateur de Region pour trier la liste des régions dans l'ordre
-		// de populations décroissantes.
-		Collections.sort(regions, new EnsemblePopComparateur(false));
+            // On trie les régions par population décroissante
+            Collections.sort(regions, new EnsemblePopComparateur(false));
 
-		// On affiche les 10 premiére régions de la liste triée.
-		for (int i = 0; i < nbRegions; i++) {
-			Region region = regions.get(i);
-			System.out.println("Region " + region.getNom() + " : " + region.getPopulation() + " habitants.");
-		}
+            // On affiche les N premières régions
+            int count = 0;
+            for (Region region : regions) {
+                System.out.println("Region " + region.getNom() + " : " + region.getPopulation() + " habitants.");
+                count++;
+                if (count >= nbRegions) {
+                    break; // Sortir de la boucle une fois que les N premières régions ont été affichées
+                }
+            }
 
-	}
-
+        } catch (NumberFormatException e) {
+            System.out.println("Erreur : Veuillez saisir un nombre valide pour le nombre de régions.");
+        } catch (Exception e) {
+            System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+        }
+    }
 }

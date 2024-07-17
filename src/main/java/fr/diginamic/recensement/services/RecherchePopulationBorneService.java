@@ -16,29 +16,45 @@ import fr.diginamic.recensement.entites.Ville;
  */
 public class RecherchePopulationBorneService extends MenuService {
 
-	@Override
-	public void traiter(Recensement rec, Scanner scanner) {
+    @Override
+    public void traiter(Recensement rec, Scanner scanner) {
 
-		System.out.println("Quel est le code du département recherché ? ");
-		String choix = scanner.nextLine();
+        try {
+            System.out.println("Quel est le code du département recherché ? ");
+            String choix = scanner.nextLine();
 
-		System.out.println("Choississez une population minimum (en milliers d'habitants): ");
-		String saisieMin = scanner.nextLine();
-		
-		System.out.println("Choississez une population maximum (en milliers d'habitants): ");
-		String saisieMax = scanner.nextLine();
+            System.out.println("Choisissez une population minimum (en milliers d'habitants): ");
+            String saisieMin = scanner.nextLine();
 
-		int min = Integer.parseInt(saisieMin) * 1000;
-		int max = Integer.parseInt(saisieMax) * 1000;
-		
-		List<Ville> villes = rec.getVilles();
-		for (Ville ville : villes) {
-			if (ville.getCodeDepartement().equalsIgnoreCase(choix)) {
-				if (ville.getPopulation() >= min && ville.getPopulation() <= max) {
-					System.out.println(ville);
-				}
-			}
-		}
-	}
+            System.out.println("Choisissez une population maximum (en milliers d'habitants): ");
+            String saisieMax = scanner.nextLine();
 
+            int min = Integer.parseInt(saisieMin) * 1000;
+            int max = Integer.parseInt(saisieMax) * 1000;
+
+            if (min > max) {
+                System.out.println("Erreur : la population minimum ne peut pas être supérieure à la population maximum.");
+                return;
+            }
+
+            List<Ville> villes = rec.getVilles();
+            boolean found = false;
+            for (Ville ville : villes) {
+                if (ville.getCodeDepartement().equalsIgnoreCase(choix)) {
+                    if (ville.getPopulation() >= min && ville.getPopulation() <= max) {
+                        System.out.println(ville);
+                        found = true;
+                    }
+                }
+            }
+            if (!found) {
+                System.out.println("Aucune ville trouvée pour ce département avec les critères de population spécifiés.");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Erreur : veuillez saisir des nombres entiers valides pour les populations.");
+        } catch (Exception e) {
+            System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+        }
+    }
 }

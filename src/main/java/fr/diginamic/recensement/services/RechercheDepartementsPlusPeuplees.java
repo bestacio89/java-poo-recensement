@@ -20,37 +20,52 @@ import fr.diginamic.recensement.services.comparators.EnsemblePopComparateur;
  */
 public class RechercheDepartementsPlusPeuplees extends MenuService {
 
-	@Override
-	public void traiter(Recensement recensement, Scanner scanner) {
+    @Override
+    public void traiter(Recensement recensement, Scanner scanner) {
 
-		System.out.println("Veuillez saisir un nombre de départements:");
-		String nbDeptsStr = scanner.nextLine();
-		int nbDepts = Integer.parseInt(nbDeptsStr);
+        System.out.println("Veuillez saisir un nombre de départements:");
 
-		List<Ville> villes = recensement.getVilles();
-		Map<String, Departement> mapDepts = new HashMap<>();
+        try {
+            String nbDeptsStr = scanner.nextLine();
+            int nbDepts = Integer.parseInt(nbDeptsStr);
 
-		for (Ville ville : villes) {
+            List<Ville> villes = recensement.getVilles();
+            Map<String, Departement> mapDepts = new HashMap<>();
 
-			Departement departement = mapDepts.get(ville.getCodeDepartement());
-			if (departement == null) {
-				departement = new Departement(ville.getCodeDepartement());
-				mapDepts.put(ville.getCodeDepartement(), departement);
-			}
-			departement.addVille(ville);
-		}
+            for (Ville ville : villes) {
 
-		List<Departement> departements = new ArrayList<Departement>();
-		departements.addAll(mapDepts.values());
+                Departement departement = mapDepts.get(ville.getCodeDepartement());
+                if (departement == null) {
+                    departement = new Departement(ville.getCodeDepartement());
+                    mapDepts.put(ville.getCodeDepartement(), departement);
+                }
+                departement.addVille(ville);
+            }
 
-		Collections.sort(departements, new EnsemblePopComparateur(false));
+            List<Departement> departements = new ArrayList<Departement>();
+            departements.addAll(mapDepts.values());
 
-		for (int i = 0; i < nbDepts; i++) {
-			Departement departement = departements.get(i);
-			System.out.println(
-					"Département " + departement.getCode() + " : " + departement.getPopulation() + " habitants.");
-		}
+            Collections.sort(departements, new EnsemblePopComparateur(false));
 
-	}
+            if (nbDepts > departements.size()) {
+                System.out.println("Le nombre de départements demandé dépasse le nombre total de départements disponibles.");
+                return;
+            }
+
+            for (int i = 0; i < nbDepts; i++) {
+                Departement departement = departements.get(i);
+                System.out.println(
+                        "Département " + departement.getCode() + " : " + departement.getPopulation() + " habitants.");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Erreur : veuillez saisir un nombre entier valide.");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Erreur : le nombre de départements demandé est supérieur au nombre total de départements disponibles.");
+        } catch (Exception e) {
+            System.out.println("Une erreur inattendue s'est produite : " + e.getMessage());
+        }
+
+    }
 
 }
